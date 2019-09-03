@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'core',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -84,16 +87,17 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DATABASE_NAME'],
-        'HOST': os.environ['DATABASE_HOST'],
-        'USER': os.environ['DATABASE_USER'],
-        'PORT': os.environ['DATABASE_PORT'],
-        'PASSWORD': os.environ['DATABASE_PASSWORD']
+if 'DATABASE_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['DATABASE_NAME'],
+            'HOST': os.environ['DATABASE_HOST'],
+            'USER': os.environ['DATABASE_USER'],
+            'PORT': os.environ['DATABASE_PORT'],
+            'PASSWORD': os.environ['DATABASE_PASSWORD']
+        }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -130,3 +134,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+AUTH_USER_MODEL = 'users.User'
