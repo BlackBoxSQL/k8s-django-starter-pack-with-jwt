@@ -60,14 +60,14 @@ spec:
               value: rabbitmq-cluster-ip-service
             - name: RABBITMQ_PORT
               valueFrom:
-                - secretKeyRef:
-                    key: rabbitmq_port
-                    name: secrets
+                secretKeyRef:
+                  key: rabbitmq_port
+                  name: secrets
             - name: ALLOWED_HOST
               valueFrom:
-                - secretKeyRef:
-                    key: allowed_host
-                    name: secrets
+                secretKeyRef:
+                  key: allowed_host
+                  name: secrets
             - name: BUCKET_URL
               valueFrom:
                 secretKeyRef:

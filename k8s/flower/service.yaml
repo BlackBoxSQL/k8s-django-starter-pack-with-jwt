@@ -7,5 +7,5 @@ spec:
   selector:
     pod: flower-deployment
   ports:
-    - port: 80
+    - port: 5555
       targetPort: 5555

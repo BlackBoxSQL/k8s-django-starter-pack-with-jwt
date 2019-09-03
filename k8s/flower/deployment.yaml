@@ -69,7 +69,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: allowed_host
-                  name:secrets
+                  name: secrets
             - name: BUCKET_URL
               valueFrom:
                 secretKeyRef:
