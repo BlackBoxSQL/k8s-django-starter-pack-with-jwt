@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: api-deployment-container
-          image: gcr.io/bkashbiponon/quickly-global-api
+          image: sample_image_name
           imagePullPolicy: Always
           ports:
             - containerPort: 8000

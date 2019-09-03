@@ -20,7 +20,7 @@ spec:
         - name: flower-deployment-container
           ports:
             - containerPort: 5555
-          image: gcr.io/bkashbiponon/quickly-global-api
+          image: sample_image_name
           command: ['celery', 'flower', '-A', 'api']
           env:
             - name: DB_PASSWORD

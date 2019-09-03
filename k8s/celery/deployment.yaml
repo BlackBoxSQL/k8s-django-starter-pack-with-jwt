@@ -18,7 +18,7 @@ spec:
         - name: gcr-json-key
       containers:
         - name: celery-deployment-container
-          image: gcr.io/bkashbiponon/quickly-global-api
+          image: sample_image_name
           command: ['celery', '-A', 'api', 'worker', '-l', 'INFO']
           env:
             - name: DB_PASSWORD
