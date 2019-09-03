@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-deployment
+  labels:
+    pod: rabbitmq-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: rabbitmq-deployment
+  template:
+    metadata:
+      labels:
+        pod: rabbitmq-deployment
+    spec:
+      imagePullSecrets:
+        - name: docker-hub-registry
+      containers:
+        - name: rabbitmq-deployment-container
+          image: rabbitmq
+          ports:
+            - containerPort: 5672
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  key: rabbitmq_user
+                  name: secrets
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: rabbitmq_password
+                  name: secrets
+

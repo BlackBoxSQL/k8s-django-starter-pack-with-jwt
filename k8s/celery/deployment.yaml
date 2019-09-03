@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-deployment
+  labels:
+    pod: celery-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: celery-deployment
+  template:
+    metadata:
+      labels:
+        pod: celery-deployment
+    spec:
+      imagePullSecrets:
+        - name: gcr-json-key
+      containers:
+        - name: celery-deployment-container
+          image: gcr.io/bkashbiponon/quickly-global-api
+          command: ['celery', '-A', 'api', 'worker', '-l', 'INFO']
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: db_password
+                  name: secrets
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: db_host
+                  name: secrets
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: db_name
+                  name: secrets
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: db_user
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: db_port
+                  name: secrets
+            - name: RABBITMQ_USER
+              valueFrom:
+                secretKeyRef:
+                  key: rabbitmq_user
+                  name: secrets
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: rabbitmq_password
+                  name: secrets
+            - name: RABBITMQ_URL
+              value: rabbitmq-cluster-ip-service
+            - name: RABBITMQ_PORT
+              valueFrom:
+                - secretKeyRef:
+                    key: rabbitmq_port
+                    name: secrets
+            - name: ALLOWED_HOST
+              valueFrom:
+                - secretKeyRef:
+                    key: allowed_host
+                    name: secrets
+            - name: BUCKET_URL
+              valueFrom:
+                secretKeyRef:
+                  key: storage_bucket
+                  name: secrets
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.14
+          command: ["/cloud_sql_proxy", "--dir=/secrets",
+                    "-instances=$(db_instance_name)=tcp:5432",
+                    "-credential_file=/secrets/secrets/credentials.json"]
+          env:
+            - name: db_instance_name
+              valueFrom:
+                secretKeyRef:
+                  key: db_instance_name
+                  name: secrets
+          securityContext:
+            runAsUser: 2  # non-root user
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/secrets
+              readOnly: true
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: secrets
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+        - name: secrets
+          emptyDir:
+
