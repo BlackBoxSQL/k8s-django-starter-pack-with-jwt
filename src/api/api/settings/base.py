@@ -18,24 +18,12 @@ from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
-SETTINGS_DIR = os.path.join(PROJECT_DIR, 'settings')
-with open(os.path.join(SETTINGS_DIR, 'secrets.json'), 'r') as f:
-    SECRETS = json.loads(f.read())
-
-
-def get_secrets(settings, secrets=SECRETS):
-    """gettings the secrets from the secrets.json"""
-    try:
-        return secrets[settings]
-    except ImproperlyConfigured as exception:
-        return ImproperlyConfigured(exception)
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secrets('secret_key')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

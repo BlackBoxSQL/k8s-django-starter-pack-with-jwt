@@ -75,6 +75,11 @@ spec:
                 secretKeyRef:
                   key: storage_bucket
                   name: secrets
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: secret_key
+                  name: secrets
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.14
           command: ["/cloud_sql_proxy", "--dir=/secrets",
